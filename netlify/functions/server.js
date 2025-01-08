@@ -7,9 +7,12 @@ const serverless = require("serverless-http");
 
 const app = express();
 
+// Parse the GOOGLE_API_KEY_JSON environment variable
+const googleApiKey = JSON.parse(process.env.GOOGLE_API_KEY_JSON);
+
 // Google Cloud Vision API client setup
 const client = new vision.ImageAnnotatorClient({
-  keyFilename: process.env.GOOGLE_API_KEY_PATH,
+  credentials: googleApiKey, // Pass the credentials directly
 });
 
 // Set up multer for file uploads
