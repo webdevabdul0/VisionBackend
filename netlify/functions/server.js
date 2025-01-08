@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const vision = require("@google-cloud/vision");
 const fs = require("fs");
+const cors = require("cors");
 require("dotenv").config();
 const serverless = require("serverless-http");
 
@@ -14,6 +15,13 @@ const googleApiKey = JSON.parse(process.env.GOOGLE_API_KEY_JSON);
 const client = new vision.ImageAnnotatorClient({
   credentials: googleApiKey, // Pass the credentials directly
 });
+app.use(
+  cors({
+    origin: "*", // Allow requests from any origin (adjust this for production)
+    methods: ["GET", "POST"], // Allow GET and POST methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
+  })
+);
 
 // Set up multer for file uploads
 const upload = multer({
