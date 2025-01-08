@@ -1,6 +1,7 @@
 [build]
+  command = "echo 'No build command'"
+  publish = "/"
   functions = "netlify/functions"
-  publish = "public"
 
 [[redirects]]
   from = "/classify"
