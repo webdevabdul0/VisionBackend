@@ -2,18 +2,19 @@ const express = require("express");
 const multer = require("multer");
 const vision = require("@google-cloud/vision");
 const fs = require("fs");
-const path = require("path");
+require("dotenv").config();
+const serverless = require("serverless-http");
 
 const app = express();
 
 // Google Cloud Vision API client setup
 const client = new vision.ImageAnnotatorClient({
-  keyFilename: "./ApiKey.json",
+  keyFilename: process.env.GOOGLE_API_KEY_PATH,
 });
 
 // Set up multer for file uploads
 const upload = multer({
-  dest: "uploads/", // Temporary upload directory
+  dest: "/tmp/uploads/", // Temporary upload directory for Netlify
 });
 
 const disposal_methods = {
@@ -125,11 +126,10 @@ app.post("/classify", upload.single("image"), async (req, res) => {
   } catch (err) {
     console.error("ERROR:", err);
     res.status(500).json({ error: "Failed to process the image." });
+  } finally {
+    fs.unlinkSync(filePath); // Always clean up
   }
 });
 
-// Start the server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://127.0.0.1:${PORT}`);
-});
+// Export the handler for serverless deployment
+module.exports.handler = serverless(app);
