@@ -1,9 +1,8 @@
 [build]
-  functions = "netlify-functions"  # The folder where serverless functions are located
-  publish = "public"               # Optional: if you have any static assets
+  functions = "netlify/functions"
+  publish = "public"
 
 [[redirects]]
   from = "/classify"
   to = "/.netlify/functions/server/classify"
   status = 200
-  force = true
